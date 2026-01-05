@@ -3,6 +3,7 @@ import { loginSchema } from "~~/shared/types/auth";
 import { Response } from "~~/shared/types/response";
 import { usersTable } from "~~/server/db/schema";
 import { eq } from "drizzle-orm";
+import { compare } from "bcrypt-ts";
 import jwt from "jsonwebtoken";
 
 export default defineEventHandler(async (event) => {
@@ -22,10 +23,7 @@ export default defineEventHandler(async (event) => {
     });
   }
 
-  const isPasswordValid = await Bun.password.verify(
-    body.password,
-    user.password
-  );
+  const isPasswordValid = await compare(body.password, user.password);
 
   if (!isPasswordValid) {
     throw createError({

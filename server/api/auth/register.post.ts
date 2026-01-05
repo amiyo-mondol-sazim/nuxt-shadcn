@@ -1,6 +1,7 @@
 import db from "~~/server/lib/db";
 import { registerSchema } from "~~/shared/types/auth";
 import { Response } from "~~/shared/types/response";
+import { hash } from "bcrypt-ts";
 import { usersTable } from "~~/server/db/schema";
 import { eq } from "drizzle-orm";
 
@@ -21,7 +22,7 @@ export default defineEventHandler(async (event) => {
     });
   }
 
-  const hashedPassword = await Bun.password.hash(body.password);
+  const hashedPassword = await hash(body.password, 10);
 
   const [newUser] = await db
     .insert(usersTable)
