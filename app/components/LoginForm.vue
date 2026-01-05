@@ -17,35 +17,39 @@ import {
 import { Input } from "@/components/ui/input";
 import { useForm } from "vee-validate";
 import { toTypedSchema } from "@vee-validate/zod";
-import { registerSchema } from "../../shared/types/auth";
+import { loginSchema } from "../../shared/types/auth";
 import { toast } from "vue-sonner";
-import { navigateTo } from "#app";
+import { navigateTo, useCookie } from "#app";
 
 const form = useForm({
-  validationSchema: toTypedSchema(registerSchema),
+  validationSchema: toTypedSchema(loginSchema),
   initialValues: {
-    username: "",
     email: "",
     password: "",
-    passwordConfirmation: "",
   },
 });
 
 const onSubmit = form.handleSubmit(async (values) => {
   try {
-    const result = await $fetch("/api/auth/register", {
+    const result = await $fetch("/api/auth/login", {
       method: "POST",
       body: values,
     });
-    toast.success("Registration successful " + result.data?.username, {
-      description: "You can now login",
+
+    const token = useCookie("auth_token");
+    token.value = result.data;
+
+    toast.success("Login successful", {
+      description: "Welcome back!",
     });
-    form.resetForm();
-    await navigateTo("/login");
-  } catch (err) {
-    console.error("Registration failed:", err);
-    toast.error("Registration failed", {
-      description: "Please try again",
+
+    await navigateTo("/dashboard");
+  } catch (err: any) {
+    console.error("Login failed:", err);
+    toast.error("Login failed", {
+      description:
+        err.data?.statusMessage ||
+        "Please check your credentials and try again",
     });
   }
 });
@@ -54,23 +58,13 @@ const onSubmit = form.handleSubmit(async (values) => {
 <template>
   <Card class="mx-auto max-w-md">
     <CardHeader>
-      <CardTitle>Create an account</CardTitle>
+      <CardTitle>Login</CardTitle>
       <CardDescription>
-        Enter your information below to create your account
+        Enter your credentials to access your account
       </CardDescription>
     </CardHeader>
     <CardContent>
       <form @submit.prevent="onSubmit" class="space-y-4">
-        <FormField v-slot="{ componentField }" name="username">
-          <FormItem>
-            <FormLabel>Username</FormLabel>
-            <FormControl>
-              <Input type="text" placeholder="John" v-bind="componentField" />
-            </FormControl>
-            <FormMessage />
-          </FormItem>
-        </FormField>
-
         <FormField v-slot="{ componentField }" name="email">
           <FormItem>
             <FormLabel>Email</FormLabel>
@@ -95,22 +89,12 @@ const onSubmit = form.handleSubmit(async (values) => {
           </FormItem>
         </FormField>
 
-        <FormField v-slot="{ componentField }" name="passwordConfirmation">
-          <FormItem>
-            <FormLabel>Confirm Password</FormLabel>
-            <FormControl>
-              <Input type="password" v-bind="componentField" />
-            </FormControl>
-            <FormMessage />
-          </FormItem>
-        </FormField>
-
         <div class="flex flex-col gap-2">
-          <Button type="submit">Create Account</Button>
-          <Button variant="outline" type="button"> Sign up with Google </Button>
+          <Button type="submit">Sign In</Button>
+          <Button variant="outline" type="button"> Sign in with Google </Button>
           <p class="px-6 text-center text-sm text-muted-foreground">
-            Already have an account?
-            <NuxtLink to="/login" class="underline">Sign in</NuxtLink>
+            Don't have an account?
+            <NuxtLink to="/signup" class="underline">Sign up</NuxtLink>
           </p>
         </div>
       </form>
