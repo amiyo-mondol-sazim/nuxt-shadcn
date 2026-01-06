@@ -13,5 +13,8 @@ export default withNuxt(
                 "@typescript-eslint/no-explicit-any": "off",
             },
         },
+        {
+            ignores: ["app/components/ui/**"],
+        },
     ]
 );
