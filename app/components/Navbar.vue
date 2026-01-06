@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { ListTodo } from "lucide-vue-next";
+
+const { user, logout } = useUser();
 </script>
 
 <template>
@@ -18,8 +20,24 @@ import { ListTodo } from "lucide-vue-next";
                 <span>TodoMaster</span>
             </div>
             <nav class="flex items-center gap-4">
-                <Button variant="ghost" size="sm">Log in</Button>
-                <Button size="sm">Get Started</Button>
+                <ModeToggle />
+                <NuxtLink v-if="!user" to="/login">
+                    <Button variant="ghost" size="sm">Log in</Button>
+                </NuxtLink>
+                <NuxtLink v-if="!user" to="/signup">
+                    <Button size="sm">Get Started</Button>
+                </NuxtLink>
+                <NuxtLink v-if="user" to="/dashboard">
+                    <Button size="sm" variant="ghost">Dashboard</Button>
+                </NuxtLink>
+                <Button
+                    v-if="user"
+                    size="sm"
+                    variant="destructive"
+                    @click="logout"
+                >
+                    Logout
+                </Button>
             </nav>
         </div>
     </header>
