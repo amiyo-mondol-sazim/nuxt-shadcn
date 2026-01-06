@@ -1,9 +1,7 @@
 <script setup lang="ts">
 import { useForm } from "vee-validate";
 import { toTypedSchema } from "@vee-validate/zod";
-import { registerSchema } from "../../shared/types/auth";
 import { toast } from "vue-sonner";
-import { navigateTo } from "#app";
 
 const form = useForm({
     validationSchema: toTypedSchema(registerSchema),

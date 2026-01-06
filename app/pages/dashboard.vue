@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import TodoList from "~/components/Dashboard/TodoList.vue";
-
 definePageMeta({
     middleware: "auth",
 });
@@ -23,6 +21,6 @@ const { user } = useUser();
             </div>
         </div>
 
-        <TodoList />
+        <DashboardTodoList />
     </div>
 </template>

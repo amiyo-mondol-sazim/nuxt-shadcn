@@ -1,0 +1,39 @@
+name: Security & Quality Check
+
+on:
+    push:
+        branches: [main]
+    pull_request:
+        branches: [main]
+
+jobs:
+    security-and-quality:
+        name: Security & Code Quality
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v4
+
+            - name: Setup Bun
+              uses: oven-sh/setup-bun@v1
+              with:
+                  bun-version: latest
+
+            - name: Install dependencies
+              run: bun install
+
+            - name: Lint Code (ESLint)
+              run: bun run lint
+
+            - name: Check Formatting (Prettier)
+              run: bun run format --check
+
+            - name: Type Check
+              run: bun run postinstall && bunx vue-tsc --noEmit
+
+            - name: Audit Dependencies based on Bun
+              run: bun install --frozen-lockfile
+
+            - name: Build Project
+              run: bun run build
