@@ -11,14 +11,14 @@ const { user, logout } = useUser();
         <div
             class="container mx-auto px-4 flex h-14 items-center justify-between"
         >
-            <div class="flex items-center gap-2 font-bold text-xl">
+            <NuxtLink to="/" class="flex items-center gap-2 font-bold text-xl">
                 <div
                     class="h-8 w-8 rounded-lg bg-primary flex items-center justify-center text-primary-foreground"
                 >
                     <ListTodo class="h-5 w-5" />
                 </div>
                 <span>TodoMaster</span>
-            </div>
+            </NuxtLink>
             <nav class="flex items-center gap-4">
                 <ModeToggle />
                 <NuxtLink v-if="!user" to="/login">

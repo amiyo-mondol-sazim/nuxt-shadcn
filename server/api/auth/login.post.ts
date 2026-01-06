@@ -36,12 +36,6 @@ export default defineEventHandler(async (event) => {
         expiresIn: "12h",
     });
 
-    setCookie(event, "auth_token", token, {
-        httpOnly: true,
-        sameSite: "lax",
-        maxAge: 60 * 60 * 12,
-    });
-
     return {
         data: token,
         message: "User logged in successfully",

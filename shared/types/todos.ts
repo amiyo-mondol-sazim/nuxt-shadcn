@@ -1,4 +1,6 @@
+import type { InferSelectModel } from "drizzle-orm";
 import z from "zod";
+import type { todosTable } from "~~/server/db/schema";
 import { statusEnum } from "~~/server/db/schema";
 
 export const updateTodoSchema = z.object({
@@ -15,3 +17,5 @@ export const createTodoSchema = z.object({
 });
 
 export type CreateTodoSchemaType = z.infer<typeof createTodoSchema>;
+
+export type Todo = InferSelectModel<typeof todosTable>;
