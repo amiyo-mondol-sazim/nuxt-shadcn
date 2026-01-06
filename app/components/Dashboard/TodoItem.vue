@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { Icon } from "@iconify/vue";
-import type { Todo } from "~~/shared/types/todos";
 import { cn } from "@/lib/utils";
 
 const props = defineProps<{

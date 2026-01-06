@@ -2,7 +2,6 @@
 import { toTypedSchema } from "@vee-validate/zod";
 import { useForm } from "vee-validate";
 import { toast } from "vue-sonner";
-import { loginSchema } from "../../shared/types/auth";
 
 const form = useForm({
     validationSchema: toTypedSchema(loginSchema),
