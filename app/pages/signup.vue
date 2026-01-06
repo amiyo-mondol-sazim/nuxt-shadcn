@@ -1,3 +1,3 @@
 <template>
-	<SignupForm />
+    <SignupForm />
 </template>
